@@ -1,0 +1,53 @@
+package com.example.javiosyc.todoapp.model.enums;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Created by javiosyc on 2017/1/17.
+ */
+
+public enum ToDoItemStatus {
+    DONE("done", "DONE"), TO_DO("toDo", "TO-DO"), PAST_DUE("pastDue", "PAST-DUE");
+
+    private String content;
+    private String text;
+
+    private ToDoItemStatus(String content, String text) {
+        this.content = content;
+        this.text = text;
+    }
+
+    private static final Map<String, ToDoItemStatus> map = new HashMap<>();
+
+    static {
+        for (ToDoItemStatus status : ToDoItemStatus.values())
+            map.put(status.getContent(), status);
+    }
+
+    public static ToDoItemStatus getEnumByContext(String context) {
+        ToDoItemStatus level = map.get(context);
+        return level;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public static String[] getAllStatus() {
+        String[] items = new String[map.size()];
+        items[0] = ToDoItemStatus.TO_DO.getText();
+        items[1] = ToDoItemStatus.DONE.getText();
+        items[2] = ToDoItemStatus.PAST_DUE.getText();
+        return items;
+    }
+
+    @Override
+    public String toString() {
+        return this.content;
+    }
+}
