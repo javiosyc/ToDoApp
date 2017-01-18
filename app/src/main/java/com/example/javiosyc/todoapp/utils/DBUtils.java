@@ -16,17 +16,17 @@ import java.util.List;
 public class DBUtils {
     private static final String FILE_NAME = "todo.txt";
 
-    public void writeItems (  File filesDir ,  ArrayList<ToDoItem> items) {
+    public void writeItems (  File filesDir ,  List<ToDoItem> items) {
         File todoFile = new File(filesDir, FILE_NAME);
         try {
-            FileUtils.writeLines(todoFile,items);
+            FileUtils.writeLines(todoFile,(ArrayList)items);
         }catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<ToDoItem> readItems( File filesDir) {
-        ArrayList<ToDoItem> items;
+    public List<ToDoItem> readItems( File filesDir) {
+        List<ToDoItem> items;
         File todoFile = new File(filesDir, FILE_NAME);
         try{
             items = parseRecords (FileUtils.readLines(todoFile));
@@ -36,9 +36,9 @@ public class DBUtils {
         return items;
     }
 
-    private ArrayList<ToDoItem> parseRecords(List<String> records) {
+    private List<ToDoItem> parseRecords(List<String> records) {
 
-        ArrayList<ToDoItem> items = new ArrayList<>();
+        List<ToDoItem> items = new ArrayList<>();
 
         for(String record: records) {
             ToDoItem item = new ToDoItem(record);

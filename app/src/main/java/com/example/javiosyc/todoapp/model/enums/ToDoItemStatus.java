@@ -38,16 +38,21 @@ public enum ToDoItemStatus {
         return text;
     }
 
-    public static String[] getAllStatus() {
-        String[] items = new String[map.size()];
-        items[0] = ToDoItemStatus.TO_DO.getText();
-        items[1] = ToDoItemStatus.DONE.getText();
-        items[2] = ToDoItemStatus.PAST_DUE.getText();
+    public static ToDoItemStatus[] getAllStatus() {
+        ToDoItemStatus[] items = new ToDoItemStatus[map.size()];
+        items[0] = ToDoItemStatus.TO_DO;
+        items[1] = ToDoItemStatus.DONE;
+        items[2] = ToDoItemStatus.PAST_DUE;
         return items;
     }
 
     @Override
     public String toString() {
         return this.content;
+    }
+
+
+    public static int  getDefaultLevelIndex() {
+        return 0;
     }
 }

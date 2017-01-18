@@ -13,14 +13,17 @@ import com.example.javiosyc.todoapp.model.ToDoItem;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemAction;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemLevel;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemStatus;
-import com.example.javiosyc.todoapp.utils.DBUtils;
 
-import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
 
 
 public class EditItemActivity extends AppCompatActivity {
+    private static final String TODO_NAME_PREFIX = "TODO_";
+    private static final String DEFAULT_NOTE_VALUE = "NOTE";
     private static Logger _log = Logger.getLogger(EditItemActivity.class.getName());
     private CalendarView calendarView;
     private EditText nameEditText;
@@ -44,7 +47,7 @@ public class EditItemActivity extends AppCompatActivity {
 
     private void setValueByAction() {
         ToDoItemAction action = (ToDoItemAction) intent.getSerializableExtra("action");
-
+        _log.info("action:" + action);
         switch (action) {
             case EDIT:
                 int position = intent.getIntExtra("selectedItemPosition", -1);
@@ -53,15 +56,39 @@ public class EditItemActivity extends AppCompatActivity {
                 if (position >= 0) {
                     ToDoItem item = items.get(position);
                     nameEditText.setText(item.getName());
-                    //SimpleDateFormat.
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-                    //calendarView.setDate();
+                    try {
+                        calendarView.setDate(dateFormat.parse(item.getDueDate()).getTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    noteEditText.setText(item.getNote());
+
+                    int index = ((ArrayAdapter)levelSpinner.getAdapter()).getPosition(item.getLevel());
+
+                    if(index  >= 0 ) {
+                        levelSpinner.setSelection(index);
+                    }
+
+                    index  = ((ArrayAdapter)statusSpinner.getAdapter()).getPosition(item.getStatus());
+                    if(index >= 0) {
+                        statusSpinner.setSelection(index);
+                    }
                 }
+                break;
+            case ADD:
+                    nameEditText.setText( TODO_NAME_PREFIX   + (items.size() + 1));
+                    noteEditText.setText(DEFAULT_NOTE_VALUE);
+                    levelSpinner.setSelection(ToDoItemLevel.getDefaultLevelIndex());
+                    statusSpinner.setSelection(ToDoItemStatus.getDefaultLevelIndex());
                 break;
             default:
                 break;
         }
     }
+
 
     public void initView() {
         setContentView(R.layout.activity_edit_item);
@@ -81,12 +108,12 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     private void initLevelSpinner() {
-        ArrayAdapter statusAdpater = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,
+        ArrayAdapter levelAdpater = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,
                 ToDoItemLevel.getAllStatus());
 
-        statusAdpater.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        levelAdpater.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
-        levelSpinner.setAdapter(statusAdpater);
+        levelSpinner.setAdapter(levelAdpater);
     }
 
     private void initStatusSpinner() {
@@ -101,8 +128,6 @@ public class EditItemActivity extends AppCompatActivity {
     public void onDeleteItem(View v) {
         int position = intent.getIntExtra("selectedItemPosition", -1);
         items.remove(position);
-
-        updateDB();
 
         Intent data = new Intent();
         data.putExtra("action", ToDoItemAction.DELETE);
@@ -127,35 +152,45 @@ public class EditItemActivity extends AppCompatActivity {
 
                 if (position >= 0) {
                     ToDoItem item = items.get(position);
-                    item.setName(nameEditText.getText().toString());
+
+                    updateByCurrentView(item);
 
                     data.putExtra("updateItemPosition", position);
                     data.putExtra("updateItem", item);
                 }
                 break;
             case ADD:
-                ToDoItem item = new ToDoItem(name);
+                ToDoItem item = new ToDoItem();
+                updateByCurrentView(item);
                 items.add(item);
 
                 data.putExtra("updateItemPosition", items.size() - 1);
                 data.putExtra("updateItem", item);
                 break;
+            case DELETE:
+                break;
             default:
                 break;
         }
-
-
-        updateDB();
 
         setResult(RESULT_OK, data);
 
         finish();
     }
 
-    private void updateDB() {
-        String directory = intent.getStringExtra("saveFileDir");
-        DBUtils utils = new DBUtils();
-        utils.writeItems(new File(directory), items);
 
+    private void updateByCurrentView(ToDoItem item) {
+
+        item.setName(nameEditText.getText().toString());
+
+        Date date  =  new Date (calendarView.getDate());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        item.setDueDate(dateFormat.format(date));
+
+        item.setNote(noteEditText.getText().toString());
+        item.setLevel( (ToDoItemLevel) levelSpinner.getSelectedItem());
+        item.setStatus( (ToDoItemStatus) statusSpinner.getSelectedItem());
+
+        _log.info("note:"  +  item.getNote());
     }
 }

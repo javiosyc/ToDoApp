@@ -9,26 +9,37 @@ import java.io.Serializable;
  * Created by javiosyc on 2017/1/17.
  */
 
-public class ToDoItem  implements Serializable{
+public class ToDoItem implements Serializable {
+    private long id;
     private String name;
     private String dueDate;
     private String note;
     private ToDoItemLevel level;
     private ToDoItemStatus status;
-    public static final String  COLUMN_SPLIT = ":";
+    public static final String COLUMN_SPLIT = ":";
+
     public ToDoItem() {
     }
 
 
-    public ToDoItem(String name ) {
+    public ToDoItem(String name) {
         this.name = name;
     }
+
     public ToDoItem(String name, String dueDate, String note, ToDoItemLevel level, ToDoItemStatus status) {
         this.name = name;
         this.dueDate = dueDate;
         this.note = note;
         this.level = level;
         this.status = status;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

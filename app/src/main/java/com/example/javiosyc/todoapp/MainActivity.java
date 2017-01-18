@@ -8,35 +8,52 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.javiosyc.todoapp.dao.ToDoDAO;
 import com.example.javiosyc.todoapp.model.ToDoItem;
+import com.example.javiosyc.todoapp.model.adapters.ToDoItemsViewHolderAdapter;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemAction;
 import com.example.javiosyc.todoapp.utils.DBUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 
 public class MainActivity extends AppCompatActivity {
     private static Logger _log = Logger.getLogger(MainActivity.class.getName());
     private final int REQUEST_CODE = 200;
-    ArrayList<ToDoItem> items;
+    List<ToDoItem> items;
     ArrayAdapter<ToDoItem> itemsAdapter;
     ListView lvItems;
+
+    private ToDoDAO toDoDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        lvItems = (ListView) findViewById(R.id.lvItems);
 
+        /*
         DBUtils utils = new DBUtils();
 
         items = utils.readItems(getFilesDir());
+        */
+
+        toDoDAO = new ToDoDAO(getApplicationContext());
+
+        items = toDoDAO.getAll();
 
         _log.info(String.valueOf(items.size()));
 
 
-        itemsAdapter = new ArrayAdapter<ToDoItem>(this, android.R.layout.simple_list_item_1, items);
+        //itemsAdapter = new ArrayAdapter<ToDoItem>(this, android.R.layout.simple_list_item_1, items);
+
+
+        //itemsAdapter = new ToDoItemsNoCachingAdapter(this,items);
+
+        itemsAdapter = new ToDoItemsViewHolderAdapter(this,items);
+
+        lvItems = (ListView) findViewById(R.id.lvItems);
         lvItems.setAdapter(itemsAdapter);
 
         setupListViewEditorListener();
@@ -51,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
 
                 intent.putExtra("action", ToDoItemAction.EDIT);
-                intent.putExtra("items", items);
-                intent.putExtra("saveFileDir", getFilesDir().getAbsolutePath());
+                intent.putExtra("items", (ArrayList<ToDoItem>) items);
 
                 intent.putExtra("selectedItemPosition", position);
 
@@ -68,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
 
         intent.putExtra("action", ToDoItemAction.ADD);
-        intent.putExtra("items", items);
-        intent.putExtra("saveFileDir", getFilesDir().getAbsolutePath());
+        intent.putExtra("items", (ArrayList<ToDoItem>) items);
 
         startActivityForResult(intent, REQUEST_CODE);
     }
@@ -84,24 +99,44 @@ public class MainActivity extends AppCompatActivity {
                 switch (action) {
                     case ADD:
                         ToDoItem item = (ToDoItem) data.getSerializableExtra("updateItem");
-                        itemsAdapter.add(item);
+
+                        /*items.add(item);*/
+
+                        item = toDoDAO.insert(item);
+
+                        items.add(item);
                         itemsAdapter.notifyDataSetChanged();
+
                         break;
                     case EDIT:
                         ToDoItem updateItem = (ToDoItem) data.getSerializableExtra("updateItem");
-                        ToDoItem oldItem = itemsAdapter.getItem(position);
-                        oldItem.setName(updateItem.getName());
+
+                        /*ToDoItem oldItem = itemsAdapter.getItem(position);*/
+
+                        toDoDAO.update(updateItem);
+
+                        items.set(position, updateItem);
                         itemsAdapter.notifyDataSetChanged();
 
                         break;
                     case DELETE:
                         ToDoItem deletedItem = itemsAdapter.getItem(position);
-                        itemsAdapter.remove(deletedItem);
+
+                        toDoDAO.delete(deletedItem.getId());
+
+                        items.remove(deletedItem);
                         itemsAdapter.notifyDataSetChanged();
 
                         break;
                 }
+
+                //updateDB();
             }
         }
+    }
+
+    private void updateDB() {
+        DBUtils utils = new DBUtils();
+        utils.writeItems(getFilesDir(), items);
     }
 }
