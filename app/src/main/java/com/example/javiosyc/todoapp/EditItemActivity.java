@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.javiosyc.todoapp.model.ToDoItem;
+import com.example.javiosyc.todoapp.model.adapters.ListAdapter;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemAction;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemLevel;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemStatus;
@@ -108,21 +109,16 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     private void initLevelSpinner() {
-        ArrayAdapter levelAdpater = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,
-                ToDoItemLevel.getAllStatus());
-
-        levelAdpater.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter levelAdpater = new ListAdapter(this, ToDoItemLevel.getAllStatus());
 
         levelSpinner.setAdapter(levelAdpater);
     }
 
     private void initStatusSpinner() {
-        ArrayAdapter statusAdpater = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,
-                ToDoItemStatus.getAllStatus());
 
-        statusAdpater.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter statusListAdapter = new ListAdapter(this,ToDoItemStatus.getAllStatus());
 
-        statusSpinner.setAdapter(statusAdpater);
+        statusSpinner.setAdapter(statusListAdapter);
     }
 
     public void onDeleteItem(View v) {

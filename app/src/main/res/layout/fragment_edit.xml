@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/fragmentNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.42"
+            android:text="Task Name"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/fragmentNameEditText"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/fragmentDueDateTextView"
+            android:layout_width="147dp"
+            android:layout_height="match_parent"
+            android:text="Due Date"
+            android:textSize="30sp" />
+
+        <CalendarView
+            android:id="@+id/fragmentCalendarView"
+            android:layout_width="224dp"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/fragmentNoteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:text="NOTES" />
+
+        <EditText
+            android:id="@+id/fragmentNoteEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/fragmentLevelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:text="Priority Level" />
+
+        <Spinner
+            android:id="@+id/fragmentLevelSpinner"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.02"
+            android:ems="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/fragmentStatusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:text="Status" />
+
+        <Spinner
+            android:id="@+id/fragmentStatusSpinner"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.02"
+            android:ems="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="363dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/fragmentSavebutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSaveItem"
+            android:text="SAVE" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:onClick="onDeleteItem"
+            android:text="DELETE" />
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+
+
+

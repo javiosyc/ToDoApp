@@ -7,14 +7,14 @@ import java.util.Map;
  * Created by javiosyc on 2017/1/17.
  */
 
-public enum ToDoItemLevel {
-    HIGH("high", "HIGH","#D31930"), NORMAL("normal", "NORMAL","#698980"), LOWER("lower", "LOWER","#c5a08d");
+public enum ToDoItemLevel implements ListProperty {
+    HIGH("high", "HIGH", "#D31930"), NORMAL("normal", "NORMAL", "#698980"), LOWER("lower", "LOWER", "#c5a08d");
 
-    private String text;
     private String content;
+    private String text;
     private String color;
 
-    private ToDoItemLevel(String content, String text ,String color) {
+    private ToDoItemLevel(String content, String text, String color) {
         this.content = content;
         this.text = text;
         this.color = color;
@@ -27,6 +27,7 @@ public enum ToDoItemLevel {
             map.put(level.getContent(), level);
     }
 
+    @Override
     public String getText() {
         return text;
     }
@@ -57,7 +58,7 @@ public enum ToDoItemLevel {
         return color;
     }
 
-    public static int  getDefaultLevelIndex() {
+    public static int getDefaultLevelIndex() {
         return 1;
     }
 }

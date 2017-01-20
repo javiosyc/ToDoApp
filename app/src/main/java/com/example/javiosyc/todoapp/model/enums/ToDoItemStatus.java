@@ -7,7 +7,7 @@ import java.util.Map;
  * Created by javiosyc on 2017/1/17.
  */
 
-public enum ToDoItemStatus {
+public enum ToDoItemStatus implements ListProperty {
     DONE("done", "DONE"), TO_DO("toDo", "TO-DO"), PAST_DUE("pastDue", "PAST-DUE");
 
     private String content;
@@ -52,7 +52,7 @@ public enum ToDoItemStatus {
     }
 
 
-    public static int  getDefaultLevelIndex() {
+    public static int getDefaultLevelIndex() {
         return 0;
     }
 }

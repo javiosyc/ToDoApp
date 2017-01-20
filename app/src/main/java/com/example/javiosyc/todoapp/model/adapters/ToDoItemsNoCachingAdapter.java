@@ -13,15 +13,13 @@ import com.example.javiosyc.todoapp.R;
 import com.example.javiosyc.todoapp.model.ToDoItem;
 import com.example.javiosyc.todoapp.model.enums.ToDoItemLevel;
 
-import java.util.List;
-
 /**
  * Created by javiosyc on 2017/1/18.
  */
 
 public class ToDoItemsNoCachingAdapter extends ArrayAdapter<ToDoItem>{
 
-    public ToDoItemsNoCachingAdapter(Context context, List<ToDoItem> resource) {
+    public ToDoItemsNoCachingAdapter(Context context, ToDoItem[] resource) {
         super(context, 0, resource);
     }
 

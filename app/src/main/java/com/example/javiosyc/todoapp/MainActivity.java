@@ -2,6 +2,7 @@ package com.example.javiosyc.todoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         lvItems.setAdapter(itemsAdapter);
 
         setupListViewEditorListener();
+
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        EditDialogFragment editTodDialogFramgment = EditDialogFragment.newInstance("ADD");
+        editTodDialogFramgment.show(fm, "fragment_edit");
     }
 
     private void setupListViewEditorListener() {
@@ -65,19 +73,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-
-                intent.putExtra("action", ToDoItemAction.EDIT);
-                intent.putExtra("items", (ArrayList<ToDoItem>) items);
-
-                intent.putExtra("selectedItemPosition", position);
-
-                _log.info("selectedItemPosition:" + position);
-                _log.info("selectedItemName:" + items.get(position).getName());
-
-                startActivityForResult(intent, REQUEST_CODE);
+                showEditActivity(position);
+                //showEditDialog();
             }
         });
+    }
+
+    private void showEditActivity(int position) {
+        Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+
+        intent.putExtra("action", ToDoItemAction.EDIT);
+        intent.putExtra("items", (ArrayList<ToDoItem>) items);
+
+        intent.putExtra("selectedItemPosition", position);
+
+        _log.info("selectedItemPosition:" + position);
+        _log.info("selectedItemName:" + items.get(position).getName());
+
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     public void onAddItem(View v) {
